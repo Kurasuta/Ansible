@@ -44,7 +44,19 @@
   become_user: postgres
   postgresql_user: name=sentry password="{{ lookup('password', 'credentials/' + inventory_hostname + '/postgres_sentry_password length=15') }}"
 
-- name: create event database
+- name: create database
   become_user: postgres
   postgresql_db: name=sentry owner=sentry
   register: db_created
+
+- name: configure sentry database user
+  lineinfile: dest=/etc/sentry/sentry.conf.py
+              regexp="'USER': '"
+              line="'USER': 'sentry'"
+  notify: restart apache
+
+- name: configure sentry database password
+  lineinfile: dest=/etc/sentry/sentry.conf.py
+              regexp="'PASSWORD': '"
+              line="'PASSWORD': '{{ lookup('password', 'credentials/' + inventory_hostname + '/postgres_sentry_password length=15') }}'"
+  notify: restart apache
