@@ -15,6 +15,7 @@
 
   roles:
     - kurasuta-master
+    - kurasuta-database
     - sentry
 
 - name: deploy satellite nodes
