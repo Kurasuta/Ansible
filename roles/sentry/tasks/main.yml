@@ -39,3 +39,12 @@
 - name: create sentry config
   command: "/www/sentry/bin/sentry init /etc/sentry/"
   when: sentry_config.stat.exists == False
+
+- name: create database user
+  become_user: postgres
+  postgresql_user: name=sentry password="{{ lookup('password', 'credentials/' + inventory_hostname + '/postgres_sentry_password length=15') }}"
+
+- name: create event database
+  become_user: postgres
+  postgresql_db: name=sentry owner=sentry
+  register: db_created

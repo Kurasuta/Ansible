@@ -1,8 +1,3 @@
-- name: install usefull tools
-  become: true
-  become_user: root
-  apt: name={{ item }} state=present
-  with_items:
-    - postgresql
-    - postgresql-client
-    - python-psycopg2
+- name: create database user
+  become_user: postgres
+  postgresql_user: name=worker password="{{ lookup('password', 'credentials/' + inventory_hostname + '/postgres_worker_password length=15') }}"
