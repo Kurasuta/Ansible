@@ -1,6 +1,4 @@
 - name: install dependencies
-  become: true
-  become_user: root
   apt: name={{ item }} state=present
   with_items:
     - python
@@ -17,20 +15,12 @@
     - libyaml-dev
     - libpq-dev
 - name: install python dependencies
-  become: true
-  become_user: root
   pip: name=virtualenv
 - name: create user
-  become: true
-  become_user: root
   user: name=sentry
 - name: create directory
-  become: true
-  become_user: root
   file: path=/www/sentry state=directory owner=sentry group=sentry
 - name: create virtualenv and install sentry
-  become: true
-  become_user: sentry
   pip:
     name: sentry
     virtualenv: /www/sentry

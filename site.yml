@@ -2,12 +2,16 @@
 
 - name: apply common configuration to all nodes
   hosts: all
+  become: true
+  become_user: root
 
   roles:
     - common
 
 - name: deploy master node
   hosts: masters
+  become: true
+  become_user: root
 
   roles:
     - kurasuta-master
@@ -15,6 +19,8 @@
 
 - name: deploy satellite nodes
   hosts: satellites
+  become: true
+  become_user: root
 
   roles:
     - kurasuta-client
