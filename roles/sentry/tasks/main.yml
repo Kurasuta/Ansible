@@ -17,14 +17,25 @@
     - libpq-dev
     - zlib1g-dev
     - build-essential
+
 - name: install python dependencies
   pip: name=virtualenv
+
 - name: create user
   user: name=sentry
+
 - name: create directory
   file: path=/www/sentry state=directory owner=sentry group=sentry
+
 - name: create virtualenv and install sentry
   become_user: sentry
   pip:
     name: sentry
     virtualenv: /www/sentry
+
+- stat: path=/etc/sentry/config.yml
+  register: sentry_config
+
+- name: create sentry config
+  command: "/www/sentry/bin/sentry /etc/sentry/"
+  when: sentry_config.exists == False
