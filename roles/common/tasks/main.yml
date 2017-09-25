@@ -1,0 +1,7 @@
+- name: install usefull tools
+  become: true
+  become_user: root
+  apt: name={{ item }} state=present
+  with_items:
+    - file
+    - tree

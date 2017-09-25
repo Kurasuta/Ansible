@@ -1,0 +1,20 @@
+---
+
+- name: apply common configuration to all nodes
+  hosts: all
+
+  roles:
+    - common
+
+- name: deploy master node
+  hosts: masters
+
+  roles:
+    - kurasuta-master
+    - sentry
+
+- name: deploy satellite nodes
+  hosts: satellites
+
+  roles:
+    - kurasuta-client
