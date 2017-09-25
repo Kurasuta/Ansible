@@ -37,5 +37,5 @@
   register: sentry_config
 
 - name: create sentry config
-  command: "/www/sentry/bin/sentry /etc/sentry/"
+  command: "/www/sentry/bin/sentry init /etc/sentry/"
   when: sentry_config.stat.exists == False
