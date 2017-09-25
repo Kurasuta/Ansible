@@ -2,10 +2,13 @@
   apt: name={{ item }} state=present
   with_items:
     - git
+
 - name: create user
   user: name=worker
+
 - name: create directory
   file: path=/opt/Worker state=directory owner=worker group=worker
+
 - name: clone git repo
   become_user: worker
   git: repo=https://github.com/Kurasuta/Worker.git dest=/opt/Worker
