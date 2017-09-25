@@ -53,10 +53,8 @@
   lineinfile: dest=/etc/sentry/sentry.conf.py
               regexp="'USER'{{ ":" }} '"
               line="'USER'{{ ":" }} 'sentry'"
-  notify: restart apache
 
 - name: configure sentry database password
   lineinfile: dest=/etc/sentry/sentry.conf.py
               regexp="'PASSWORD'{{ ":" }} '"
               line="'PASSWORD'{{ ":" }} '{{ lookup('password', 'credentials/' + inventory_hostname + '/postgres_sentry_password length=15') }}'"
-  notify: restart apache
