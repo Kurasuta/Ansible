@@ -38,4 +38,4 @@
 
 - name: create sentry config
   command: "/www/sentry/bin/sentry /etc/sentry/"
-  when: sentry_config.exists == False
+  when: sentry_config.stat.exists == False
