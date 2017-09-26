@@ -52,9 +52,9 @@
 - name: configure sentry database user
   lineinfile: dest=/etc/sentry/sentry.conf.py
               regexp="'USER'{{ ":" }} '"
-              line="'USER'{{ ":" }} 'sentry'"
+              line="'USER'{{ ":" }} 'sentry',"
 
 - name: configure sentry database password
   lineinfile: dest=/etc/sentry/sentry.conf.py
               regexp="'PASSWORD'{{ ":" }} '"
-              line="'PASSWORD'{{ ":" }} '{{ lookup('password', 'credentials/' + inventory_hostname + '/postgres_sentry_password length=15') }}'"
+              line="'PASSWORD'{{ ":" }} '{{ lookup('password', 'credentials/' + inventory_hostname + '/postgres_sentry_password length=15') }}',"
