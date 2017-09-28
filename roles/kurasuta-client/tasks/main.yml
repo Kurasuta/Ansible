@@ -15,7 +15,7 @@
   become_user: worker
   git: repo=https://github.com/Kurasuta/Worker.git dest=/opt/Worker
 
-- name: create virtualenv and install sentry
+- name: create virtualenv and install dependencies
   become_user: worker
   pip:
     name: "{{ item }}"
