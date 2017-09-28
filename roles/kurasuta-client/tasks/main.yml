@@ -18,7 +18,7 @@
 - name: create virtualenv and install sentry
   become_user: worker
   pip:
-    name: {{ item }}
+    name: "{{ item }}"
     virtualenv: /opt/Worker/.venv
   with_items:
     - pefile
