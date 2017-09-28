@@ -3,6 +3,7 @@
   with_items:
     - git
     - upx-ucl
+    - p7zip
 
 - name: create user
   user: name=worker
@@ -13,3 +14,12 @@
 - name: clone git repo
   become_user: worker
   git: repo=https://github.com/Kurasuta/Worker.git dest=/opt/Worker
+
+- name: create virtualenv and install sentry
+  become_user: worker
+  pip:
+    name: {{ item }}
+    virtualenv: /opt/Worker/.venv
+  with_items:
+    - pefile
+    - raven
