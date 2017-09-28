@@ -19,6 +19,7 @@
   become_user: worker
   pip:
     name: "{{ item }}"
+    executable: pip3
     virtualenv: /opt/Worker/.venv
     virtualenv_python: python3
   with_items:
