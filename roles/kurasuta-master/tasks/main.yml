@@ -2,6 +2,8 @@
   user: name=kurasuta
 
 - name: create directory
+  become: true
+  become_user: root
   file: path=/www/sentry state=directory owner=kurasuta group=kurasuta
 
 - name: create virtualenv and install dependencies
