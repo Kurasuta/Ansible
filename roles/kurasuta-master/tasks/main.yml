@@ -14,8 +14,8 @@
     - requests
 
 - name: copy script to get read arguments used in commands tracked by Sentry
-  become_user: kurasuta
   template:
     src: templates/list-sentry-event-arguments.py
     dest: /opt/kurasuta/list-sentry-event-arguments.py
+    owner: kurasuta
     mode: 0755
