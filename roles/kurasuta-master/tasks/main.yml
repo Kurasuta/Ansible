@@ -1,11 +1,22 @@
-- name: install python dependencies
-  pip: name=requests
+- name: create user
+  user: name=kurasuta
+
+- name: create directory
+  file: path=/www/sentry state=directory owner=kurasuta group=kurasuta
+
+- name: create virtualenv and install dependencies
+  become_user: kurasuta
+  pip:
+    name: "{{ item }}"
+    virtualenv: /opt/kurasuta/.venv
+    virtualenv_python: python3
+  with_items:
+    - requests
 
 - name: copy script to get read arguments used in commands tracked by Sentry
-  become: true
-  become_user: root
+  become_user: kurasuta
   template:
-    src: templates/sentry-event-arguments.py
-    dest: /opt/sentry-event-arguments.py
+    src: templates/list-sentry-event-arguments.py
+    dest: /opt/kurasuta/list-sentry-event-arguments.py
     owner: root
     mode: 0755
