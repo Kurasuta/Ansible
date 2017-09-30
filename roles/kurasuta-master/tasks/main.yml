@@ -18,5 +18,4 @@
   template:
     src: templates/list-sentry-event-arguments.py
     dest: /opt/kurasuta/list-sentry-event-arguments.py
-    owner: root
     mode: 0755
