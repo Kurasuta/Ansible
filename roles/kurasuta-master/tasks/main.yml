@@ -1,3 +1,6 @@
+- name: install python dependencies
+  pip: name=requests
+
 - name: copy script to get read arguments used in commands tracked by Sentry
   become: true
   become_user: root
