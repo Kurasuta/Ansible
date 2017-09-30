@@ -1,0 +1,8 @@
+- name: copy script to get read arguments used in commands tracked by Sentry
+  become: true
+  become_user: root
+  template:
+    src: templates/sentry-event-arguments.py
+    dest: /opt/sentry-event-arguments.py
+    owner: root
+    mode: 0755
