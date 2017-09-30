@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+import codecs
 import requests
 import argparse
 import json
@@ -12,15 +13,16 @@ parser.add_argument('--host', help='Host name of sentry server', default='localh
 parser.add_argument('--port', help='Port of sentry server', default='9000')
 args = parser.parse_args()
 
+reader = codecs.getreader('utf-8')
 url = 'http://%s:%s/api/0/projects/sentry/%s/events/' % (args.host, args.port, args.project_name)
 while True:
     response = requests.get(url, headers={'Authorization': 'Bearer %s' % args.auth_token})
     if not response.links['next']['results']:
         break
     url = response.links['next']['url']
-    events = response.content
+
     i = 0
-    for event in json.loads(events):
+    for event in json.loads(reader(response.content)):
         event_args = event['context']['sys.argv']
         if len(event_args) != 2:
             continue
