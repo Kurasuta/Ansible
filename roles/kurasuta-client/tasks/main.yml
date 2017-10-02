@@ -4,6 +4,8 @@
     - git
     - upx-ucl
     - p7zip
+    - ssdeep
+    - python3-ssdeep
 
 - name: create user
   user: name=worker
@@ -24,3 +26,4 @@
   with_items:
     - pefile
     - raven
+    - ssdeep

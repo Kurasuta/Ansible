@@ -66,6 +66,7 @@ CREATE TABLE resource_sublang (
 CREATE TABLE resource (
     id serial PRIMARY KEY,
     sample_id int REFERENCES sample(id),
+    hash_sha256 VARCHAR(64),
     name_id int REFERENCES resource_name(id),
     lang_id text,
     lang_name text,
