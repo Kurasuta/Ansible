@@ -37,6 +37,12 @@
     - raven
     - entropy
 
+- name: configure raven client in Worker venv
+  become_user: worker
+  lineinfile: dest=/opt/Worker/.venv/bin/activate
+              regexp="^RAVEN_CLIENT_STRING="
+              line='RAVEN_CLIENT_STRING="{{ raven_client_string }}"'
+
 - name: install dependencies ssdeep Python bindings
   become_user: worker
   pip:
@@ -47,9 +53,3 @@
     - ssdeep
   environment:
     BUILD_LIB: '1'
-
-- name: configure raven client in Worker venv
-  become_user: worker
-  lineinfile: dest=/opt/Worker/.venv/bin/activate
-              regexp="^RAVEN_CLIENT_STRING="
-              line='RAVEN_CLIENT_STRING="{{ raven_client_string }}"'
