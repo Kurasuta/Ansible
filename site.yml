@@ -14,15 +14,15 @@
   become_user: root
 
   roles:
-    - postgres
+#    - postgres
     - kurasuta-master
-    - kurasuta-database
-    - sentry
+#    - kurasuta-database
+#    - sentry
 
-- name: deploy satellite nodes
-  hosts: satellites
+- name: deploy worker nodes
+  hosts: workers
   become: true
   become_user: root
 
   roles:
-    - kurasuta-client
+    - kurasuta-worker

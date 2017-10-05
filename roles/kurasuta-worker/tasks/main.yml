@@ -30,9 +30,9 @@
   become_user: worker
   pip:
     name: "{{ item }}"
-    virtualenv: /opt/Worker/.venv
-    virtualenv_python: python3
+    executable: pip3
   with_items:
+    - requests
     - pefile
     - raven
     - entropy
@@ -42,14 +42,3 @@
   lineinfile: dest=/opt/Worker/.venv/bin/activate
               regexp="^export RAVEN_CLIENT_STRING="
               line='export RAVEN_CLIENT_STRING="{{ raven_client_string }}"'
-
-- name: install dependencies ssdeep Python bindings
-  become_user: worker
-  pip:
-    name: "{{ item }}"
-    virtualenv: /opt/Worker/.venv
-    virtualenv_python: python3
-  with_items:
-    - ssdeep
-  environment:
-    BUILD_LIB: '1'
