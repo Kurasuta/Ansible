@@ -15,6 +15,7 @@
     - python3-dateutil
     - python3-numpy
     - python3-setuptools
+    - python3-magic
     - automake
     - autoconf
     - libtool
