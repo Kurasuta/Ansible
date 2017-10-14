@@ -20,7 +20,7 @@
     - libtool
 
 - name: create user
-  user: name=worker
+  user: name=worker uid=666
 
 - name: create directory
   file: path=/opt/Worker state=directory owner=worker group=worker
