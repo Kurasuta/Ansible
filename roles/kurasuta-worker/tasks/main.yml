@@ -28,7 +28,7 @@
 
 - name: clone git repo
   become_user: worker
-  git: repo=https://github.com/Kurasuta/Worker.git dest=/opt/Worker
+  git: repo=https://github.com/Kurasuta/Worker.git dest=/opt/Worker force=yes
 
 - name: python dependencies 
   become_user: worker
@@ -42,6 +42,7 @@
     - entropy
     - sdhash
     - nilsimsa
+    - terminaltables
 
 - name: configure raven client in Worker venv
   become_user: worker

@@ -19,3 +19,21 @@
     dest: /opt/kurasuta/list-sentry-event-arguments.py
     owner: kurasuta
     mode: 0755
+
+- name: create user
+  user: name=backend_rest_api
+
+- name: create directory
+  file: path=/opt/Server state=directory owner=backend_rest_api group=backend_rest_api
+
+- name: clone git repo
+  become_user: backend_rest_api
+  git: repo=https://github.com/Kurasuta/Server.git dest=/opt/Server force=yes
+
+- name: python dependencies
+  become_user: root
+  pip:
+    name: "{{ item }}"
+    executable: pip3
+  with_items:
+    - flask
