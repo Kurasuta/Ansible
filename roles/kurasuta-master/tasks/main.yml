@@ -37,3 +37,4 @@
     executable: pip3
   with_items:
     - flask
+    - raven

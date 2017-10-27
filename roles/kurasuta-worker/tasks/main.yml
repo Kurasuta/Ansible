@@ -19,6 +19,7 @@
     - automake
     - autoconf
     - libtool
+    - tmux
 
 - name: create user
   user: name=worker uid=666
