@@ -7,29 +7,30 @@ CREATE TABLE byte_histogram (
 );
 
 CREATE TABLE magic (id serial PRIMARY KEY, description text UNIQUE);
-CREATE TABLE peyd (id serial PRIMARY KEY,description text UNIQUE);
+CREATE TABLE peyd (id serial PRIMARY KEY, description text UNIQUE);
 CREATE TABLE path (id serial PRIMARY KEY, content text);
 CREATE TABLE export_name (id serial PRIMARY KEY, content text UNIQUE);
 
 CREATE TABLE sample (
     id serial PRIMARY KEY,
-    hash_sha256 VARCHAR(64) NOT NULL,
+    hash_sha256 VARCHAR(64) NOT NULL UNIQUE,
     hash_md5 VARCHAR(32) NOT NULL,
     hash_sha1 VARCHAR(40) NOT NULL,
     size int, -- in header
     code_histogram_id int REFERENCES byte_histogram(id),
     magic_id int REFERENCES magic(id),
     
-    ssdeep VARCHAR(64) NOT NULL,
+    ssdeep text NOT NULL,
+    imphash VARCHAR(32) NOT NULL,
     entropy double precision NOT NULL,
     
     file_size int, -- in byte on disk
-    entry_point int,
+    entry_point bigint,
     first_kb bytea,
     
     overlay_sha256 VARCHAR(64),
     overlay_size int, -- in byte
-    overlay_ssdeep VARCHAR(64) NOT NULL,
+    overlay_ssdeep text NOT NULL,
     overlay_entropy double precision NOT NULL,
 
     build_timestamp timestamp,
@@ -40,9 +41,13 @@ CREATE TABLE sample (
     export_name_id int REFERENCES export_name(id)
 );
 
-CREATE TABLE sample_has_peyd (sample_id int REFERENCES sample(id), peyd_id int REFERENCES peyd(id));
+CREATE TABLE sample_has_peyd (
+    sample_id int REFERENCES sample(id),
+    peyd_id int REFERENCES peyd(id),
+    UNIQUE(sample_id, peyd_id)
+);
 CREATE TABLE ioc (id serial PRIMARY KEY, content text UNIQUE);
-CREATE TABLE sample_has_heuristic_ioc (sample_id int REFERENCES sample(id) ioc_id int REFERENCES ioc(id));
+CREATE TABLE sample_has_heuristic_ioc (sample_id int REFERENCES sample(id), ioc_id int REFERENCES ioc(id));
 
 CREATE TABLE debug_directory (
     id serial PRIMARY KEY,
@@ -66,7 +71,7 @@ CREATE TABLE section (
     raw_size int CHECK(raw_size >= 0),
     
     entropy double precision NOT NULL,
-    ssdeep VARCHAR(64) NOT NULL,
+    ssdeep text NOT NULL,
 
     sort_order int CHECK(sort_order >= 0)
 );
@@ -80,11 +85,11 @@ CREATE TABLE resource (
     sample_id int REFERENCES sample(id),
     
     hash_sha256 VARCHAR(64) NOT NULL,
-    "offset" int CHECK("offset" >= 0),
-    "size" int CHECK("size" >= 0),
+    "offset" bigint CHECK("offset" >= 0),
+    "size" bigint CHECK("size" >= 0),
     actual_size int CHECK(actual_size >= 0),
     entropy double precision NOT NULL,
-    ssdeep VARCHAR(64) NOT NULL,
+    ssdeep text NOT NULL,
     
     type_pair_id int REFERENCES resource_type_pair(id),
     name_pair_id int REFERENCES resource_name_pair(id),
@@ -99,16 +104,17 @@ CREATE TABLE export_symbol_name (id serial PRIMARY KEY, content text UNIQUE);
 CREATE TABLE export_symbol (
     id serial PRIMARY KEY,
     sample_id int REFERENCES sample(id),
-    address int NOT NULL,
+    address bigint NOT NULL,
     ordinal text NOT NULL,
     name_id int REFERENCES export_symbol_name(id)
 );
 
 CREATE TABLE dll_name (id serial PRIMARY KEY, content text UNIQUE);
+CREATE TABLE import_name (id serial PRIMARY KEY, content text UNIQUE);
 CREATE TABLE import (
     id serial PRIMARY KEY,
+    sample_id int REFERENCES sample(id),
     dll_name_id int REFERENCES dll_name(id) NOT NULL,
-    address int NOT NULL,
+    address bigint NOT NULL,
     name_id int REFERENCES import_name(id)
 );
-CREATE TABLE import_name (id serial PRIMARY KEY, content text UNIQUE);
