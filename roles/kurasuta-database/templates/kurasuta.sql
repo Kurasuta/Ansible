@@ -54,7 +54,7 @@ CREATE TABLE debug_directory (
     sample_id int REFERENCES sample(id) NOT NULL,
     timestamp timestamp,
     path_id int REFERENCES path(id),
-    age int,
+    age bigint,
     signature text,
     guid VARCHAR(37)
 );
@@ -66,9 +66,9 @@ CREATE TABLE section (
     hash_sha256 VARCHAR(64),
     name_id int REFERENCES section_name(id),
     
-    virtual_address int CHECK(virtual_address >= 0),
-    virtual_size int CHECK(virtual_size >= 0),
-    raw_size int CHECK(raw_size >= 0),
+    virtual_address bigint CHECK(virtual_address >= 0),
+    virtual_size bigint CHECK(virtual_size >= 0),
+    raw_size bigint CHECK(raw_size >= 0),
     
     entropy double precision NOT NULL,
     ssdeep text NOT NULL,
@@ -117,4 +117,20 @@ CREATE TABLE import (
     dll_name_id int REFERENCES dll_name(id) NOT NULL,
     address bigint NOT NULL,
     name_id int REFERENCES import_name(id)
+);
+
+CREATE TYPE task_type AS ENUM('PEMetadata');
+
+CREATE TABLE task_consumer (
+    id serial PRIMARY KEY,
+    name VARCHAR(25) NOT NULL
+);
+
+CREATE TABLE task (
+    id serial PRIMARY KEY,
+    "type" task_type NOT NULL,
+    payload json NOT NULL,
+    assigned_at timestamp,
+    completed_at timestamp,
+    consumer_id int REFERENCES task_consumer(id)
 );
