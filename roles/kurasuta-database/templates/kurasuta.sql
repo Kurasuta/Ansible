@@ -1,5 +1,5 @@
 SET search_path TO public;
-DROP TABLE IF EXISTS byte_histogram, magic, peyd, sample_has_peyd, path, sample, ioc, sample_has_heuristic_ioc, debug_directory, section_name, section, resource_type_pair, resource_name_pair, resource_language_pair, resource, guid, export_name, export_symbol_name, export_symbol, import, dll_name, import_name CASCADE;
+DROP TABLE IF EXISTS byte_histogram, magic, peyd, sample_has_peyd, path, sample, ioc, sample_has_heuristic_ioc, debug_directory, section_name, section, resource_type_pair, resource_name_pair, resource_language_pair, resource, guid, export_name, export_symbol_name, export_symbol, import, dll_name, import_namem, task_consumer, task CASCADE;
 
 CREATE TABLE byte_histogram (
     id serial PRIMARY KEY,
@@ -48,6 +48,7 @@ CREATE TABLE sample_has_peyd (
 );
 CREATE TABLE ioc (id serial PRIMARY KEY, content text UNIQUE);
 CREATE TABLE sample_has_heuristic_ioc (sample_id int REFERENCES sample(id), ioc_id int REFERENCES ioc(id));
+CREATE INDEX sample_has_heuristic_ioc_sample_id_idx ON sample_has_heuristic_ioc(sample_id);
 
 CREATE TABLE debug_directory (
     id serial PRIMARY KEY,
@@ -58,6 +59,7 @@ CREATE TABLE debug_directory (
     signature text,
     guid VARCHAR(37)
 );
+CREATE INDEX debug_directory_sample_id_idx ON debug_directory(sample_id);
 
 CREATE TABLE section_name (id serial PRIMARY KEY, content text UNIQUE);
 CREATE TABLE section (
@@ -75,6 +77,8 @@ CREATE TABLE section (
 
     sort_order int CHECK(sort_order >= 0)
 );
+CREATE INDEX section_sample_id_idx ON section(sample_id);
+
 
 CREATE TABLE resource_type_pair (id serial PRIMARY KEY, content_id text, content_str text);
 CREATE TABLE resource_name_pair (id serial PRIMARY KEY, content_id text, content_str text);
@@ -97,8 +101,10 @@ CREATE TABLE resource (
 
     sort_order int CHECK(sort_order >= 0)
 );
+CREATE INDEX resource_sample_id_idx ON resource(sample_id);
 
 CREATE TABLE guid (id VARCHAR(32) PRIMARY KEY, sample_id int REFERENCES sample(id));
+CREATE INDEX guid_sample_id_idx ON guid(sample_id);
 
 CREATE TABLE export_symbol_name (id serial PRIMARY KEY, content text UNIQUE);
 CREATE TABLE export_symbol (
@@ -108,6 +114,7 @@ CREATE TABLE export_symbol (
     ordinal text NOT NULL,
     name_id int REFERENCES export_symbol_name(id)
 );
+CREATE INDEX export_symbol_sample_id_idx ON export_symbol(sample_id);
 
 CREATE TABLE dll_name (id serial PRIMARY KEY, content text UNIQUE);
 CREATE TABLE import_name (id serial PRIMARY KEY, content text UNIQUE);
@@ -118,6 +125,7 @@ CREATE TABLE import (
     address bigint NOT NULL,
     name_id int REFERENCES import_name(id)
 );
+CREATE INDEX import_sample_id_idx ON import(sample_id);
 
 CREATE TYPE task_type AS ENUM('PEMetadata');
 
@@ -130,6 +138,7 @@ CREATE TABLE task (
     id serial PRIMARY KEY,
     "type" task_type NOT NULL,
     payload json NOT NULL,
+    created_at timestamp default current_timestamp,
     assigned_at timestamp,
     completed_at timestamp,
     consumer_id int REFERENCES task_consumer(id)
