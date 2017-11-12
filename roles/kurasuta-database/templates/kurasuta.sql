@@ -1,5 +1,5 @@
 SET search_path TO public;
-DROP TABLE IF EXISTS byte_histogram, magic, peyd, sample_has_peyd, path, sample, ioc, sample_has_heuristic_ioc, debug_directory, section_name, section, resource_type_pair, resource_name_pair, resource_language_pair, resource, guid, export_name, export_symbol_name, export_symbol, import, dll_name, import_namem, task_consumer, task CASCADE;
+DROP TABLE IF EXISTS byte_histogram, magic, peyd, sample_has_peyd, path, sample, ioc, sample_has_heuristic_ioc, debug_directory, section_name, section, resource_type_pair, resource_name_pair, resource_language_pair, resource, guid, export_name, export_symbol_name, export_symbol, import, dll_name, import_namem, task_consumer, task, sample_function CASCADE;
 
 CREATE TABLE byte_histogram (
     id serial PRIMARY KEY,
@@ -59,6 +59,8 @@ CREATE TABLE sample_function (
     nlocals int NOT NULL,
     outdegree int NOT NULL,
     "type" VARCHAR(20) NOT NULL,
+    opcodes_sha256 VARCHAR(64) NOT NULL,
+    opcodes_crc32 VARCHAR(8) NOT NULL,
     cleaned_opcodes_sha256 VARCHAR(64) NOT NULL,
     cleaned_opcodes_crc32 VARCHAR(8) NOT NULL
 );
