@@ -153,7 +153,7 @@ CREATE TABLE import (
 );
 CREATE INDEX import_sample_id_idx ON import(sample_id);
 
-CREATE TYPE task_type AS ENUM('PEMetadata');
+CREATE TYPE task_type AS ENUM('PEMetadata', 'R2Disassembly');
 
 CREATE TABLE task_consumer (
     id serial PRIMARY KEY,
@@ -170,4 +170,4 @@ CREATE TABLE task (
     completed_at timestamp,
     consumer_id int REFERENCES task_consumer(id)
 );
-CREATE INDEX task_type_assigned_at_idx ON sample_has_heuristic_ioc(sample_id);
+CREATE INDEX task_type_assigned_at_idx ON task("type", assigned_at);
