@@ -41,6 +41,31 @@ CREATE TABLE sample (
     export_name_id int REFERENCES export_name(id)
 );
 
+CREATE TABLE sample_function (
+    id serial PRIMARY KEY,
+    sample_id int REFERENCES sample(id) NOT NULL,
+    "offset" bigint CHECK("offset" >= 0) NOT NULL,
+    "size" int CHECK("size" >= 0) NOT NULL,
+    "real_size" int CHECK("real_size" >= 0) NOT NULL,
+    name text NOT NULL,
+    calltype VARCHAR(20) NOT NULL,
+    cc int NOT NULL,
+    cost int NOT NULL,
+    ebbs int NOT NULL,
+    edges int NOT NULL,
+    indegree int NOT NULL,
+    nargs int NOT NULL,
+    nbbs int NOT NULL,
+    nlocals int NOT NULL,
+    outdegree int NOT NULL,
+    "type" VARCHAR(20) NOT NULL,
+    cleaned_opcodes_sha256 VARCHAR(64) NOT NULL,
+    cleaned_opcodes_crc32 VARCHAR(8) NOT NULL
+);
+CREATE INDEX sample_function_sample_id_idx ON sample_function(sample_id);
+CREATE INDEX sample_function_cleaned_opcodes_crc32_idx ON sample_function(cleaned_opcodes_crc32);
+CREATE INDEX sample_function_cleaned_opcodes_sha256_idx ON sample_function(cleaned_opcodes_sha256);
+
 CREATE TABLE sample_has_peyd (
     sample_id int REFERENCES sample(id),
     peyd_id int REFERENCES peyd(id),
@@ -78,7 +103,6 @@ CREATE TABLE section (
     sort_order int CHECK(sort_order >= 0)
 );
 CREATE INDEX section_sample_id_idx ON section(sample_id);
-
 
 CREATE TABLE resource_type_pair (id serial PRIMARY KEY, content_id text, content_str text);
 CREATE TABLE resource_name_pair (id serial PRIMARY KEY, content_id text, content_str text);
@@ -133,6 +157,7 @@ CREATE TABLE task_consumer (
     id serial PRIMARY KEY,
     name VARCHAR(25) NOT NULL
 );
+CREATE INDEX task_consumer_name_idx ON task_consumer(name);
 
 CREATE TABLE task (
     id serial PRIMARY KEY,
@@ -143,3 +168,4 @@ CREATE TABLE task (
     completed_at timestamp,
     consumer_id int REFERENCES task_consumer(id)
 );
+CREATE INDEX task_type_assigned_at_idx ON sample_has_heuristic_ioc(sample_id);
