@@ -62,7 +62,8 @@ CREATE TABLE sample_function (
     opcodes_sha256 VARCHAR(64) NOT NULL,
     opcodes_crc32 VARCHAR(8) NOT NULL,
     cleaned_opcodes_sha256 VARCHAR(64) NOT NULL,
-    cleaned_opcodes_crc32 VARCHAR(8) NOT NULL
+    cleaned_opcodes_crc32 VARCHAR(8) NOT NULL,
+    opcodes json
 );
 CREATE INDEX sample_function_sample_id_idx ON sample_function(sample_id);
 CREATE INDEX sample_function_cleaned_opcodes_crc32_idx ON sample_function(cleaned_opcodes_crc32);
