@@ -69,6 +69,17 @@ CREATE INDEX sample_function_sample_id_idx ON sample_function(sample_id);
 CREATE INDEX sample_function_cleaned_opcodes_crc32_idx ON sample_function(cleaned_opcodes_crc32);
 CREATE INDEX sample_function_cleaned_opcodes_sha256_idx ON sample_function(cleaned_opcodes_sha256);
 
+CREATE TABLE sample_has_source (
+    sample_id int REFERENCES sample(id),
+    source_id int REFERENCES sample_source(id),
+    UNIQUE(sample_id, source_id)
+);
+
+CREATE TABLE sample_source (
+    id serial PRIMARY KEY,
+    identifier VARCHAR(50)
+);
+
 CREATE TABLE sample_has_peyd (
     sample_id int REFERENCES sample(id),
     peyd_id int REFERENCES peyd(id),
