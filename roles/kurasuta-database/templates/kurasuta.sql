@@ -74,10 +74,20 @@ CREATE TABLE sample_has_source (
     source_id int REFERENCES sample_source(id),
     UNIQUE(sample_id, source_id)
 );
+CREATE TABLE sample_source (id serial PRIMARY KEY, identifier VARCHAR(50) UNIQUE);
 
-CREATE TABLE sample_source (
-    id serial PRIMARY KEY,
-    identifier VARCHAR(50)
+CREATE TABLE sample_tag (id serial PRIMARY KEY, name VARCHAR(256) UNIQUE);
+CREATE TABLE sample_has_tag (
+    sample_id int REFERENCES sample(id),
+    tag_id int REFERENCES sample_tag(id),
+    UNIQUE(sample_id, tag_id)
+);
+
+CREATE TABLE sample_file_name (id serial PRIMARY KEY, name text UNIQUE);
+CREATE TABLE sample_has_file_name (
+    sample_id int REFERENCES sample(id),
+    file_name_id int REFERENCES sample_file_name(id),
+    UNIQUE(sample_id, file_name_id)
 );
 
 CREATE TABLE sample_has_peyd (

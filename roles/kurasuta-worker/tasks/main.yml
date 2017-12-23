@@ -51,3 +51,26 @@
               create=yes
               regexp="^export RAVEN_CLIENT_STRING="
               line='export RAVEN_CLIENT_STRING="{{ raven_client_string }}"'
+
+- name: copy script to list running processes
+  copy: 
+    src: processes_running_at_least.py
+    dest: /usr/local/bin/processes_running_at_least.py
+    mode: 744
+
+- name: copy script to send running processes to zabbix
+  copy: 
+    src: send-worker-number-to-zabbix 
+    dest: /usr/local/bin/send-worker-number-to-zabbix 
+    mode: 755
+
+- name: create cronjob to kill long-running workers every minute
+  cron:
+    name: kill long running radare2 workers
+    job: "/usr/local/bin/processes_running_at_least.py 300 | xargs -r kill"
+
+- name: create cronjob to send worker number to zabbix
+  cron:
+    name: send worker number to zabbix
+    minute: */10
+    job: "/usr/local/bin/send-worker-number-to-zabbix > /dev/null"

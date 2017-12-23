@@ -7,3 +7,6 @@
     - tree
     - unzip
     - htop
+    - p7zip
+    - p7zip-full
+    - p7zip-rar

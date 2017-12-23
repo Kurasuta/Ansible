@@ -1,0 +1,1 @@
+/usr/bin/zabbix_sender -c /etc/zabbix/zabbix_agentd.conf -k kurasuta.worker.count -o $(ps aux | grep /opt/Worker/process.py | grep -v grep | wc -l)
