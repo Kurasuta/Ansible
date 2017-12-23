@@ -44,7 +44,7 @@
     src: "{{ item }}"
     dest: "/usr/local/bin/"
     mode: 0755
-  with_itmes:
+  with_items:
     - postgres-count-rows
     - postgres-database-size
     - kurasuta-assigned-incomplete-r2-tasks
