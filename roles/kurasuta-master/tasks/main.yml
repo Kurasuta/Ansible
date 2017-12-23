@@ -38,3 +38,58 @@
   with_items:
     - flask
     - raven
+
+- name: copy scripts that generate stats
+  copy:
+    src: "{{ item }}"
+    dest: "/usr/local/bin/"
+    mode: 0755
+  with_itmes:
+    - postgres-count-rows
+    - postgres-database-size
+    - kurasuta-assigned-incomplete-r2-tasks
+    - kurasuta-assigned-incomplete-tasks
+    - kurasuta-unassigned-r2-tasks
+    - kurasuta-unassigned-tasks
+
+- name: create cron job for database size
+  cron:
+    name: database size
+    minute: 0
+    job: "/usr/bin/zabbix_sender -c /etc/zabbix/zabbix_agentd.conf -k kurasuta.database.size -o $(su - postgres -c '/usr/local/bin/postgres-database-size kurasuta')"
+
+- name: create cron job for sample count
+  cron:
+    name: sample count
+    minute: 0
+    job: "/usr/bin/zabbix_sender -c /etc/zabbix/zabbix_agentd.conf -k kurasuta.database.sample.count -o $(su - postgres -c '/usr/local/bin/postgres-count-rows kurasuta sample')"
+
+- name: create cron job for function count
+  cron:
+    name: function count
+    minute: 0
+    job: "/usr/bin/zabbix_sender -c /etc/zabbix/zabbix_agentd.conf -k kurasuta.database.function.count -o $(su - postgres -c '/usr/local/bin/postgres-count-rows kurasuta sample_function')"
+
+- name: create cron job for incomplete tasks
+  cron:
+    name: incomplete tasks
+    minute: 0
+    job: "/usr/bin/zabbix_sender -c /etc/zabbix/zabbix_agentd.conf -k kurasuta.task.incomplete.count -o $(su - postgres -c '/usr/local/bin/kurasuta-assigned-incomplete-tasks')"
+
+- name: create cron job for unassigned tasks
+  cron:
+    name: unassigned tasks
+    minute: 0
+    job: "/usr/bin/zabbix_sender -c /etc/zabbix/zabbix_agentd.conf -k kurasuta.task.unassigned.count -o $(su - postgres -c '/usr/local/bin/kurasuta-unassigned-tasks')"
+
+- name: create cron job for unassigned R2 tasks
+  cron:
+    name: unassigned R2 tasks
+    minute: 0
+    job: "/usr/bin/zabbix_sender -c /etc/zabbix/zabbix_agentd.conf -k kurasuta.task.unassigned_r2.count -o $(su - postgres -c '/usr/local/bin/kurasuta-unassigned-r2-tasks')"
+
+- name: create cron job for incomplete R2 tasks
+  cron:
+    name: incomplete R2 tasks
+    minute: 0
+    job: "/usr/bin/zabbix_sender -c /etc/zabbix/zabbix_agentd.conf -k kurasuta.task.incomplete_r2.count -o $(su - postgres -c '/usr/local/bin/kurasuta-assigned-incomplete-r2-tasks')"

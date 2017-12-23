@@ -1,0 +1,5 @@
+if [ "$#" -ne 2 ]; then
+    echo "Usage: $0 DATABASE_NAME TABLE_NAME"
+    exit
+fi
+psql -t -d $1 -c "SELECT COUNT(*) FROM $2" | xargs
