@@ -72,5 +72,5 @@
 - name: create cronjob to send worker number to zabbix
   cron:
     name: send worker number to zabbix
-    minute: */10
+    minute: "*/10"
     job: "/usr/local/bin/send-worker-number-to-zabbix > /dev/null"
