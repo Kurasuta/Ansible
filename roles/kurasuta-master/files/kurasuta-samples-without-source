@@ -1,0 +1,1 @@
+psql -t -d kurasuta -c 'SELECT COUNT(s.*) FROM sample s LEFT JOIN sample_has_source c ON (s.id = c.sample_id) WHERE (c.source_id IS NULL)' | xargs

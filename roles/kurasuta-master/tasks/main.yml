@@ -51,6 +51,7 @@
     - kurasuta-assigned-incomplete-tasks
     - kurasuta-unassigned-r2-tasks
     - kurasuta-unassigned-tasks
+    - kurasuta-samples-without-source
 
 - name: create cron job for database size
   cron:
@@ -93,3 +94,9 @@
     name: incomplete R2 tasks
     minute: 0
     job: "/usr/bin/zabbix_sender -c /etc/zabbix/zabbix_agentd.conf -k kurasuta.task.incomplete_r2.count -o $(su - postgres -c '/usr/local/bin/kurasuta-assigned-incomplete-r2-tasks') > /dev/null"
+
+- name: create cron job for sourceless samples
+  cron:
+    name: samples without source
+    minute: 0
+    job: "/usr/bin/zabbix_sender -c /etc/zabbix/zabbix_agentd.conf -k kurasuta.sample.sourceless -o $(su - postgres -c '/usr/local/bin/kurasuta-samples-without-source') > /dev/null"
