@@ -42,10 +42,10 @@
 - name: create user for frontend API
   user: name=frontend_api
 
-- name: create directory
+- name: create directory for frontend API
   file: path=/opt/FrontendApi state=directory owner=frontend_api group=frontend_api
 
-- name: clone git repo
+- name: clone git repo for frontend API
   become_user: backend_rest_api
   git: repo=https://github.com/Kurasuta/FrontendApi.git dest=/opt/FrontendApi force=yes
 
