@@ -46,7 +46,7 @@
   file: path=/opt/FrontendApi state=directory owner=frontend_api group=frontend_api
 
 - name: clone git repo for frontend API
-  become_user: backend_rest_api
+  become_user: frontend_api
   git: repo=https://github.com/Kurasuta/FrontendApi.git dest=/opt/FrontendApi force=yes
 
 - name: python dependencies
