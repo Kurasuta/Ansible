@@ -39,6 +39,25 @@
     - flask
     - raven
 
+- name: create user for frontend API
+  user: name=frontend_api
+
+- name: create directory
+  file: path=/opt/FrontendApi state=directory owner=frontend_api group=frontend_api
+
+- name: clone git repo
+  become_user: backend_rest_api
+  git: repo=https://github.com/Kurasuta/FrontendApi.git dest=/opt/FrontendApi force=yes
+
+- name: python dependencies
+  become_user: root
+  pip:
+    name: "{{ item }}"
+    executable: pip3
+  with_items:
+    - flask
+    - raven
+
 - name: copy scripts that generate stats
   copy:
     src: "{{ item }}"

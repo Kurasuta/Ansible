@@ -40,6 +40,9 @@ CREATE TABLE sample (
     
     export_name_id int REFERENCES export_name(id)
 );
+CREATE INDEX sample_hash_sha256_idx ON sample(hash_sha256);
+CREATE INDEX sample_hash_sha1_idx ON sample(hash_sha1);
+CREATE INDEX sample_hash_md5_idx ON sample(hash_md5);
 
 CREATE TABLE sample_function (
     id serial PRIMARY KEY,
@@ -127,6 +130,7 @@ CREATE TABLE section (
     sort_order int CHECK(sort_order >= 0)
 );
 CREATE INDEX section_sample_id_idx ON section(sample_id);
+CREATE INDEX section_hash_sha256_idx ON section(hash_sha256);
 
 CREATE TABLE resource_type_pair (id serial PRIMARY KEY, content_id text, content_str text);
 CREATE TABLE resource_name_pair (id serial PRIMARY KEY, content_id text, content_str text);
