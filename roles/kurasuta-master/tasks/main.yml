@@ -72,6 +72,18 @@
     - kurasuta-unassigned-tasks
     - kurasuta-samples-without-source
 
+- name: create cron job for number of running backend REST API services
+  cron:
+    name: backend rest api count
+    minute: 0
+    job: "/usr/bin/zabbix_sender -c /etc/zabbix/zabbix_agentd.conf -k kurasuta.backend_rest_api.process_count -o $(ps x -u backend_rest_api | grep '/opt/Server/server.py' | grep -v grep | wc -l) > /dev/null"
+
+- name: create cron job for number of running frontend REST API services
+  cron:
+    name: frontend rest api count
+    minute: 0
+    job: "/usr/bin/zabbix_sender -c /etc/zabbix/zabbix_agentd.conf -k kurasuta.frontend_rest_api.process_count -o $(ps x -u frontend_api | grep '/opt/FrontendApi/frontend-api.py' | grep -v grep | wc -l) > /dev/null"
+
 - name: create cron job for database size
   cron:
     name: database size
