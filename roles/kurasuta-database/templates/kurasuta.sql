@@ -190,10 +190,16 @@ CREATE INDEX task_consumer_name_idx ON task_consumer(name);
 CREATE TABLE task (
     id serial PRIMARY KEY,
     "type" task_type NOT NULL,
-    payload json NOT NULL,
+    payload jsonb NOT NULL,
     created_at timestamp default current_timestamp,
     assigned_at timestamp,
     completed_at timestamp,
     consumer_id int REFERENCES task_consumer(id)
 );
 CREATE INDEX task_type_assigned_at_idx ON task("type", assigned_at);
+
+CREATE TABLE api_key (
+    id serial PRIMARY KEY,
+    content text UNIQUE
+);
+CREATE INDEX api_key_content_idx ON api_key(content);
