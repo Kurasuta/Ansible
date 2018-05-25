@@ -131,3 +131,9 @@
     name: samples without source
     minute: 0
     job: "/usr/bin/zabbix_sender -c /etc/zabbix/zabbix_agentd.conf -k kurasuta.sample.sourceless -o $(su - postgres -c '/usr/local/bin/kurasuta-samples-without-source') > /dev/null"
+
+- name: create cron job to process nginx log
+  cron:
+    name: nginx log processor
+    minute: 5
+    job: "python /opt/Server/tools/process-nginx-log.py /var/log/nginx/kurasuta_backend_api_access.log"
